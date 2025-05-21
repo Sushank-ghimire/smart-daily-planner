@@ -6,7 +6,7 @@ import type { AppTheme } from '~/constants/theme';
 interface ThemeState {
   theme: AppTheme;
   toggleTheme: () => void;
-  initializeTheme: () => Promise<void>
+  initializeTheme: () => Promise<void>;
 }
 
 export const useThemeStore = create<ThemeState>((set, get) => ({
@@ -15,8 +15,10 @@ export const useThemeStore = create<ThemeState>((set, get) => ({
     const storedTheme = await AsyncStorage.getItem('theme');
     set({ theme: storedTheme === 'light' ? lightTheme : darkTheme });
   },
-  toggleTheme: () => {
+  toggleTheme: async () => {
     const currentMode = get().theme.mode;
-    set({ theme: currentMode === 'light' ? darkTheme : lightTheme });
+    const newTheme = currentMode === 'light' ? darkTheme : lightTheme;
+    await AsyncStorage.setItem('theme', newTheme.mode);
+    set({ theme: newTheme });
   },
 }));

@@ -1,11 +1,12 @@
 import { StyleSheet, Text, View } from 'react-native';
-import React from 'react';
+import ThemeBackground from '~/components/ThemeBackground';
+import ThemeText from '~/components/Text';
 
 const habits = () => {
   return (
-    <View>
-      <Text>habits</Text>
-    </View>
+    <ThemeBackground>
+      <ThemeText>My Habits</ThemeText>
+    </ThemeBackground>
   );
 };
 

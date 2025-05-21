@@ -1,10 +1,12 @@
 import { StyleSheet, Text, View } from 'react-native';
+import ThemeText from '~/components/Text';
+import ThemeBackground from '~/components/ThemeBackground';
 
 const calendar = () => {
   return (
-    <View>
-      <Text>calendar</Text>
-    </View>
+    <ThemeBackground>
+      <ThemeText>Calender Page</ThemeText>
+    </ThemeBackground>
   );
 };
 

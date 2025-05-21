@@ -1,13 +1,10 @@
-import { StatusBar } from 'expo-status-bar';
-import { Platform } from 'react-native';
-
-import { ScreenContent } from '~/components/ScreenContent';
+import ThemeText from '~/components/Text';
+import ThemeBackground from '~/components/ThemeBackground';
 
 export default function Modal() {
   return (
-    <>
-      <ScreenContent path="app/modal.tsx" title="Modal"></ScreenContent>
-      <StatusBar style={Platform.OS === 'ios' ? 'light' : 'auto'} />
-    </>
+    <ThemeBackground>
+      <ThemeText>Hello Theme Text</ThemeText>
+    </ThemeBackground>
   );
 }

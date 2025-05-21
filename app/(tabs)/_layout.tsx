@@ -16,6 +16,12 @@ export default function TabLayout() {
         },
         tabBarInactiveTintColor: '#9CA3AF',
         headerShadowVisible: false,
+        headerStyle: {
+          backgroundColor: theme.colors.background,
+        },
+        headerTitleStyle: {
+          color: theme.colors.textPrimary,
+        },
       }}>
       <Tabs.Screen
         name="index"

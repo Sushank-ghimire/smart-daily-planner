@@ -9,6 +9,9 @@ export interface ThemeColors {
   textSecondary: string;
   border: string;
   statusbar: string;
+  tabBarBackground: string;
+  cardPrimary: string;
+  cardSecondary: string;
 }
 
 export interface AppTheme {

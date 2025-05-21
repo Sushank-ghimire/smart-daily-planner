@@ -22,6 +22,7 @@ export default function TabLayout() {
         headerTitleStyle: {
           color: theme.colors.textPrimary,
         },
+        animation: theme.mode === 'dark' ? 'none' : 'shift',
       }}>
       <Tabs.Screen
         name="index"

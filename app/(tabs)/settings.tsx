@@ -57,12 +57,12 @@ const SettingsScreen = () => {
               <ThemeText style={styles.optionText}>Dark Mode</ThemeText>
             </View>
 
-            <Animated.View style={{ transform: [{ scale: 0.9 }] }}>
+            <Animated.View style={[{ transform: [{ scale: 1.1 }] }]}>
               <Switch
                 value={isEnabled}
                 onValueChange={onToggle}
                 thumbColor={isEnabled ? theme.colors.primary : '#f8f9fa'}
-                trackColor={{ false: '#e9ecef', true: theme.colors.secondary }}
+                trackColor={{ false: '#e9ecef', true: theme.colors.primary }}
                 ios_backgroundColor="#e9ecef"
               />
             </Animated.View>

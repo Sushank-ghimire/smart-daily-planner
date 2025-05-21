@@ -1,10 +1,10 @@
-import { View, Animated, StyleSheet, TouchableOpacity, FlatList } from 'react-native';
+import { Animated, StyleSheet, FlatList, RefreshControl } from 'react-native';
 import { useEffect, useRef, useState } from 'react';
 import ThemeText from '~/components/Text';
 import ThemeBackground from '~/components/ThemeBackground';
-import { Ionicons } from '@expo/vector-icons';
 import { useThemeStore } from '~/store/theme';
 import ListHeaderCard from '~/components/ListHeaderCard';
+import EmptyListAnimation from '~/components/EmptyList';
 
 const Homepage = () => {
   const hours = new Date().getHours();
@@ -12,12 +12,10 @@ const Homepage = () => {
 
   const fadeAnim = useRef(new Animated.Value(0)).current;
   const slideUpAnim = useRef(new Animated.Value(30)).current;
-  const cardScale = useRef(new Animated.Value(0.95)).current;
 
   const { theme } = useThemeStore();
 
   useEffect(() => {
-    // Entry animations
     Animated.parallel([
       Animated.timing(fadeAnim, {
         toValue: 1,
@@ -29,17 +27,11 @@ const Homepage = () => {
         duration: 500,
         useNativeDriver: true,
       }),
-      Animated.spring(cardScale, {
-        toValue: 1,
-        friction: 5,
-        useNativeDriver: true,
-      }),
     ]).start();
   }, []);
 
   const handleRefresh = async () => {
     setRefreshing(true);
-
     try {
       await new Promise((resolve) => setTimeout(resolve, 1000));
     } catch (error) {
@@ -49,29 +41,45 @@ const Homepage = () => {
     }
   };
 
-  const tasks = [];
+  const getGreeting = () => {
+    if (hours < 12) return { text: 'Good Morning', emoji: '🌤️' };
+    if (hours < 18) return { text: 'Good Afternoon', emoji: '☀️' };
+    return { text: 'Good Evening', emoji: '🌙' };
+  };
+
+  const { text: greeting, emoji } = getGreeting();
+
+  const header = (
+    <Animated.View
+      style={[styles.header, { opacity: fadeAnim, transform: [{ translateY: slideUpAnim }] }]}>
+      <ThemeText style={styles.greeting}>
+        {greeting} <Animated.Text style={styles.emoji}>{emoji}</Animated.Text>
+      </ThemeText>
+      <ThemeText style={styles.subtitle}>Here's your schedule for today</ThemeText>
+      <ListHeaderCard />
+    </Animated.View>
+  );
 
   return (
     <ThemeBackground>
-      <Animated.ScrollView contentContainerStyle={styles.container} style={{ opacity: fadeAnim }}>
-        <Animated.View style={{ transform: [{ translateY: slideUpAnim }] }}>
-          <ThemeText style={styles.greeting}>
-            Good Morning <Animated.Text style={styles.emoji}>🌤️</Animated.Text>
-          </ThemeText>
-          <ThemeText style={styles.subtitle}>Here's your schedule for today</ThemeText>
-        </Animated.View>
-
-        <FlatList
-          data={[]}
-          onRefresh={handleRefresh}
-          refreshing={refreshing}
-          ListHeaderComponent={<ListHeaderCard />}
-          renderItem={({}) => <></>}
-          contentContainerStyle={{ paddingBottom: 40 }}
-        />
-
-        {/* Add more animated components here */}
-      </Animated.ScrollView>
+      <FlatList
+        data={[]} // Replace with your data array
+        keyExtractor={(_, index) => index.toString()}
+        renderItem={() => null}
+        contentContainerStyle={styles.container}
+        ListHeaderComponent={header}
+        ListEmptyComponent={<EmptyListAnimation />}
+        refreshControl={
+          <RefreshControl
+            refreshing={refreshing}
+            onRefresh={handleRefresh}
+            colors={[theme.colors.primary]} // Android spinner
+            progressBackgroundColor={theme.colors.card} // Android background
+            tintColor={theme.colors.primary} // iOS spinner
+            titleColor={theme.colors.textPrimary} // iOS title
+          />
+        }
+      />
     </ThemeBackground>
   );
 };
@@ -80,6 +88,10 @@ const styles = StyleSheet.create({
   container: {
     padding: 24,
     paddingTop: 40,
+    paddingBottom: 40,
+  },
+  header: {
+    marginBottom: 32,
   },
   greeting: {
     fontSize: 32,
@@ -94,37 +106,6 @@ const styles = StyleSheet.create({
     fontSize: 16,
     opacity: 0.8,
     marginBottom: 32,
-  },
-  card: {
-    borderRadius: 20,
-    padding: 20,
-    marginTop: 16,
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.05,
-    shadowRadius: 12,
-    elevation: 3,
-  },
-  cardHeader: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginBottom: 16,
-  },
-  cardTitle: {
-    fontSize: 20,
-    fontWeight: '700',
-  },
-  statsContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-  },
-  statItem: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  statText: {
-    marginLeft: 8,
-    fontSize: 14,
   },
 });
 

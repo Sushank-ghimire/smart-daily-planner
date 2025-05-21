@@ -1,0 +1,31 @@
+import { AppTheme } from '~/utils/constants/theme';
+
+export const lightTheme: AppTheme = {
+  mode: 'light',
+  colors: {
+    primary: '#3A86FF',
+    secondary: '#FFBE0B',
+    background: '#F9FAFB',
+    card: '#FFFFFF',
+    textPrimary: '#1F2937',
+    textSecondary: '#6B7280',
+    border: '#E5E7EB',
+    statusbar: '#3A86FF',
+    tabBarBackground: '#FFFFFF',
+  },
+};
+
+export const darkTheme: AppTheme = {
+  mode: 'dark',
+  colors: {
+    primary: '#3A86FF',
+    secondary: '#FFBE0B',
+    background: '#0F172A',
+    card: '#1E293B',
+    textPrimary: '#F1F5F9',
+    textSecondary: '#94A3B8',
+    border: '#334155',
+    statusbar: '#0F172A',
+    tabBarBackground: '#1E293B',
+  },
+};

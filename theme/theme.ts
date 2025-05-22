@@ -12,9 +12,11 @@ export interface ThemeColors {
   tabBarBackground: string;
   cardPrimary: string;
   cardSecondary: string;
+  picker1: string;
+  picker2: string;
 }
 
 export interface AppTheme {
-  mode: 'light' | 'dark';
+  mode: "light" | "dark";
   colors: ThemeColors;
 }

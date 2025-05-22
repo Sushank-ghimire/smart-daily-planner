@@ -1,10 +1,13 @@
 import { useState } from "react";
-import { View, TouchableOpacity, ScrollView } from "react-native";
+import { View, TouchableOpacity, ScrollView, TextInput, Alert } from "react-native";
+import { Picker } from "@react-native-picker/picker";
 import { Calendar } from "react-native-calendars";
 import ThemeBackground from "~/components/ThemeBackground";
 import ThemeText from "~/components/Text";
 import { useThemeStore } from "~/store/theme";
 import { AntDesign } from "@expo/vector-icons";
+import { PriorityLevel, TaskCategory } from "~/types";
+import Button from "~/components/Button";
 
 const CalendarPage = () => {
   const { theme } = useThemeStore();
@@ -17,9 +20,51 @@ const CalendarPage = () => {
     setSelectedDate(day.dateString);
   };
 
+  const [formState, setFormState] = useState({
+    title: "",
+    description: "",
+    priority: "medium" as PriorityLevel,
+    category: "work" as TaskCategory,
+  });
+
+  const handleAddTask = () => {
+    const { title } = formState;
+    if (!title.trim()) {
+      Alert.alert("Validation Error", "Task title is required.");
+      return;
+    }
+    const newTask = {
+      ...formState,
+      dueDate: selectedDate,
+      id: Date.now().toString(),
+      completed: false,
+      recurrence: "none",
+      notificationPreferences: {
+        push: true,
+        inApp: true,
+        timeBefore: 30,
+      },
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    };
+
+    console.log("New Task Added:", newTask);
+    Alert.alert("Success", "Task added successfully!");
+
+    // Form Reset State
+    setFormState({
+      title: "",
+      description: "",
+      priority: "medium",
+      category: "work",
+    });
+  };
+
   return (
     <ThemeBackground>
-      <ScrollView className="p-4">
+      <ScrollView
+        className="flex flex-1"
+        contentContainerStyle={{ padding: 16, paddingBottom: 120 }}>
         <Calendar
           minDate={today}
           onDayPress={handleDayPress}
@@ -64,6 +109,78 @@ const CalendarPage = () => {
               color={theme.colors.textPrimary}
             />
           </TouchableOpacity>
+        </View>
+
+        {/* User Data Form To Fillup for the events and the date to do the work */}
+        <View className="flex flex-col gap-3">
+          <TextInput
+            placeholder="Title"
+            value={formState.title}
+            onChangeText={(text) => setFormState((prev) => ({ ...prev, title: text }))}
+            placeholderTextColor="#888"
+            className="rounded-md bg-white/10 p-3 text-base text-white"
+          />
+          <TextInput
+            placeholder="Description"
+            value={formState.description}
+            onChangeText={(text) => setFormState((prev) => ({ ...prev, description: text }))}
+            placeholderTextColor="#888"
+            multiline
+            numberOfLines={3}
+            className="rounded-md bg-white/10 p-3 text-base text-white"
+          />
+          <View
+            style={{ backgroundColor: theme.colors.picker2 }}
+            className="mb-2 flex flex-col rounded-md ">
+            <Picker
+              style={{
+                color: theme.colors.textPrimary,
+                borderRadius: 15,
+              }}
+              itemStyle={{
+                borderRadius: 15,
+              }}
+              selectedValue={formState.priority}
+              dropdownIconColor={theme.colors.textPrimary}
+              onValueChange={(value) => setFormState((prev) => ({ ...prev, priority: value }))}>
+              <Picker.Item label="Low" value="low" />
+              <Picker.Item label="Medium" value="medium" />
+              <Picker.Item label="High" value="high" />
+              <Picker.Item label="Urgent" value="urgent" />
+            </Picker>
+          </View>
+          <View style={{ backgroundColor: theme.colors.picker1 }} className="mb-2 rounded-md">
+            <Picker
+              style={{
+                color: theme.colors.textPrimary,
+                borderRadius: 15,
+              }}
+              dropdownIconColor={theme.colors.textPrimary}
+              itemStyle={{
+                borderRadius: 15,
+              }}
+              selectedValue={formState.category}
+              onValueChange={(value) => setFormState((prev) => ({ ...prev, category: value }))}>
+              <Picker.Item label="Work" value="work" />
+              <Picker.Item label="Personal" value="personal" />
+              <Picker.Item label="Health" value="health" />
+              <Picker.Item label="Learning" value="learning" />
+              <Picker.Item label="Family" value="family" />
+              <Picker.Item label="Finance" value="finance" />
+              <Picker.Item label="Other" value="other" />
+            </Picker>
+          </View>
+          <Button
+            label="Add Your Plan"
+            disabled={
+              !formState.title ||
+              !formState.description ||
+              !formState.priority ||
+              !formState.category
+            }
+            onPress={handleAddTask}
+            className="rounded-md"
+          />
         </View>
       </ScrollView>
     </ThemeBackground>

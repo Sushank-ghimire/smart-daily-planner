@@ -23,6 +23,7 @@ export default function TabLayout() {
           color: theme.colors.textPrimary,
         },
         animation: theme.mode === "dark" ? "none" : "shift",
+        tabBarHideOnKeyboard: true,
       }}>
       <Tabs.Screen
         name="index"

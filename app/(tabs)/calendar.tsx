@@ -8,13 +8,21 @@ import { useThemeStore } from "~/store/theme";
 import { AntDesign } from "@expo/vector-icons";
 import { PriorityLevel, TaskCategory } from "~/types";
 import Button from "~/components/Button";
+import DateTimePicker from "@react-native-community/datetimepicker";
 
 const CalendarPage = () => {
   const { theme } = useThemeStore();
+  const [time, setTime] = useState(new Date());
+  const [showTimePicker, setShowTimePicker] = useState(false);
 
   const [selectedDate, setSelectedDate] = useState<string>(new Date().toISOString().split("T")[0]);
 
   const today = new Date().toISOString().split("T")[0];
+
+  const handleTimeChange = (_: any, selectedTime?: Date) => {
+    setShowTimePicker(false);
+    if (selectedTime) setTime(selectedTime);
+  };
 
   const handleDayPress = (day: { dateString: string }) => {
     setSelectedDate(day.dateString);
@@ -36,6 +44,7 @@ const CalendarPage = () => {
     const newTask = {
       ...formState,
       dueDate: selectedDate,
+      dueTime: time.toISOString(),
       id: Date.now().toString(),
       completed: false,
       recurrence: "none",
@@ -180,6 +189,30 @@ const CalendarPage = () => {
               <Picker.Item label="Other" value="other" />
             </Picker>
           </View>
+
+          {/* Time Selector */}
+          <TouchableOpacity
+            onPress={() => setShowTimePicker(true)}
+            style={{
+              borderColor: theme.colors.border,
+              borderWidth: 2,
+            }}
+            className="rounded-md bg-white/10 p-3">
+            <ThemeText className="text-base text-white">
+              {`Select Time: ${time.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}`}
+            </ThemeText>
+          </TouchableOpacity>
+
+          {showTimePicker && (
+            <DateTimePicker
+              value={time}
+              mode="time"
+              is24Hour={true}
+              display="default"
+              onChange={handleTimeChange}
+            />
+          )}
+
           <Button
             label="Add Your Plan"
             disabled={

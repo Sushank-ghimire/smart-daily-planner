@@ -19,8 +19,6 @@ export type RecurrencePattern =
   | 'yearly';
 
 export type NotificationPreference = {
-  push: boolean;
-  email: boolean;
   inApp: boolean;
   timeBefore: number;
 };
@@ -93,7 +91,7 @@ export interface AppData {
   notifications: Notification[];
   calendarEvents: CalendarEvent[];
   settings: {
-    theme: 'light' | 'dark' | 'system';
+    theme: 'light' | 'dark';
     defaultNotificationPreferences: NotificationPreference;
     startOfWeek: 'monday' | 'sunday';
     timeFormat: '12h' | '24h';
@@ -108,26 +106,6 @@ export interface AppData {
       | 'sunday';
   };
 }
-
-// Sample initial data
-export const initialAppData: AppData = {
-  tasks: [],
-  completedTasks: [],
-  habits: [],
-  notifications: [],
-  calendarEvents: [],
-  settings: {
-    theme: 'system',
-    defaultNotificationPreferences: {
-      push: true,
-      email: false,
-      inApp: true,
-      timeBefore: 30, // 30 minutes before
-    },
-    startOfWeek: 'monday',
-    timeFormat: '12h',
-  },
-};
 
 // Utility types for UI components
 export type FilterOptions = {

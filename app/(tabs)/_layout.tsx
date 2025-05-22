@@ -1,20 +1,20 @@
-import { Link, Tabs } from 'expo-router';
-import { HeaderButton } from '../../components/HeaderButton';
-import { TabBarIcon } from '../../components/TabBarIcon';
-import { useThemeStore } from '~/store/theme';
+import { Link, Tabs } from "expo-router";
+import { HeaderButton } from "../../components/HeaderButton";
+import { TabBarIcon } from "../../components/TabBarIcon";
+import { useThemeStore } from "~/store/theme";
 
 export default function TabLayout() {
   const { theme } = useThemeStore();
   return (
     <Tabs
       screenOptions={{
-        tabBarActiveTintColor: '#3A86FF',
+        tabBarActiveTintColor: "#3A86FF",
         tabBarStyle: {
           height: 60,
           backgroundColor: theme.colors.background,
           borderTopWidth: 0,
         },
-        tabBarInactiveTintColor: '#9CA3AF',
+        tabBarInactiveTintColor: "#9CA3AF",
         headerShadowVisible: false,
         headerStyle: {
           backgroundColor: theme.colors.background,
@@ -22,14 +22,14 @@ export default function TabLayout() {
         headerTitleStyle: {
           color: theme.colors.textPrimary,
         },
-        animation: theme.mode === 'dark' ? 'none' : 'shift',
+        animation: theme.mode === "dark" ? "none" : "shift",
       }}>
       <Tabs.Screen
         name="index"
         options={{
-          title: 'Home',
+          title: "Home",
           tabBarIcon: ({ color, size }) => (
-            <TabBarIcon size={size} source={require('~/assets/icons/home.png')} color={color} />
+            <TabBarIcon size={size} source={require("~/assets/icons/home.png")} color={color} />
           ),
           headerRight: () => (
             <Link href="/modal" asChild>
@@ -41,27 +41,28 @@ export default function TabLayout() {
       <Tabs.Screen
         name="calendar"
         options={{
-          title: 'Calendar',
+          title: "Calendar",
+          tabBarLabel: "Calendar",
           tabBarIcon: ({ color }) => (
-            <TabBarIcon source={require('~/assets/icons/calendar.png')} color={color} />
+            <TabBarIcon source={require("~/assets/icons/calendar.png")} color={color} />
           ),
         }}
       />
       <Tabs.Screen
         name="habits"
         options={{
-          title: 'Habits',
+          title: "Habits",
           tabBarIcon: ({ color }) => (
-            <TabBarIcon source={require('~/assets/icons/barbell.png')} color={color} />
+            <TabBarIcon source={require("~/assets/icons/barbell.png")} color={color} />
           ),
         }}
       />
       <Tabs.Screen
         name="settings"
         options={{
-          title: 'Settings',
+          title: "Settings",
           tabBarIcon: ({ color }) => (
-            <TabBarIcon source={require('~/assets/icons/settings.png')} color={color} />
+            <TabBarIcon source={require("~/assets/icons/settings.png")} color={color} />
           ),
         }}
       />

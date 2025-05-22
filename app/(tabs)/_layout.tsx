@@ -10,8 +10,17 @@ export default function TabLayout() {
       screenOptions={{
         tabBarActiveTintColor: "#3A86FF",
         tabBarStyle: {
-          height: 60,
+          left: 16,
+          right: 16,
+          height: 65,
           backgroundColor: theme.colors.background,
+          shadowColor: "#000",
+          shadowOpacity: 0.1,
+          shadowRadius: 8,
+          elevation: 5,
+          borderTopLeftRadius: theme.mode == "light" ? 25 : 0,
+          borderTopEndRadius: theme.mode == "light" ? 25 : 0,
+          borderTopColor: theme.colors.border,
           borderTopWidth: 0,
         },
         tabBarInactiveTintColor: "#9CA3AF",

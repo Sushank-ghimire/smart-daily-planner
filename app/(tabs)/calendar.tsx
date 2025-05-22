@@ -118,7 +118,12 @@ const CalendarPage = () => {
             value={formState.title}
             onChangeText={(text) => setFormState((prev) => ({ ...prev, title: text }))}
             placeholderTextColor="#888"
-            className="rounded-md bg-white/10 p-3 text-base text-white"
+            style={{
+              borderColor: theme.colors.border,
+              borderWidth: 2,
+              color: theme.colors.textPrimary,
+            }}
+            className="rounded-md bg-white/10 p-3 text-base"
           />
           <TextInput
             placeholder="Description"
@@ -127,7 +132,12 @@ const CalendarPage = () => {
             placeholderTextColor="#888"
             multiline
             numberOfLines={3}
-            className="rounded-md bg-white/10 p-3 text-base text-white"
+            style={{
+              borderColor: theme.colors.border,
+              borderWidth: 2,
+              color: theme.colors.textPrimary,
+            }}
+            className="rounded-md bg-white/10 p-3 text-base"
           />
           <View
             style={{ backgroundColor: theme.colors.picker2 }}

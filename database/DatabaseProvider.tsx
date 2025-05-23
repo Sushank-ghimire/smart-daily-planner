@@ -84,6 +84,7 @@ const DatabaseProvider = ({ children }: { children: React.ReactNode }) => {
         }
         throw Error(error);
       }}
+      options={{ useNewConnection: false }}
       databaseName="planner.db">
       {children}
     </SQLiteProvider>

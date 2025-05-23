@@ -6,7 +6,7 @@ import ThemeBackground from "~/components/ThemeBackground";
 import ThemeText from "~/components/Text";
 import { useThemeStore } from "~/store/theme";
 import { AntDesign } from "@expo/vector-icons";
-import { PriorityLevel, TaskCategory } from "~/types";
+import { PriorityLevel, RecurrencePattern, TaskCategory } from "~/types";
 import Button from "~/components/Button";
 import DateTimePicker from "@react-native-community/datetimepicker";
 
@@ -33,6 +33,7 @@ const CalendarPage = () => {
     description: "",
     priority: "medium" as PriorityLevel,
     category: "work" as TaskCategory,
+    recurrence: "daily" as RecurrencePattern,
   });
 
   const handleAddTask = () => {
@@ -66,6 +67,7 @@ const CalendarPage = () => {
       description: "",
       priority: "medium",
       category: "work",
+      recurrence: "daily",
     });
   };
 
@@ -190,6 +192,22 @@ const CalendarPage = () => {
             </Picker>
           </View>
 
+          <View className="mb-2 rounded-md bg-violet-400 dark:bg-violet-600">
+            <Picker
+              style={{ color: theme.colors.textPrimary }}
+              selectedValue={formState.recurrence}
+              dropdownIconColor={theme.colors.textPrimary}
+              onValueChange={(value) => setFormState((prev) => ({ ...prev, recurrence: value }))}>
+              <Picker.Item label="None" value="none" />
+              <Picker.Item label="Daily" value="daily" />
+              <Picker.Item label="Weekdays" value="weekdays" />
+              <Picker.Item label="Weekends" value="weekends" />
+              <Picker.Item label="Weekly" value="weekly" />
+              <Picker.Item label="Monthly" value="monthly" />
+              <Picker.Item label="Yearly" value="yearly" />
+            </Picker>
+          </View>
+
           {/* Time Selector */}
           <TouchableOpacity
             onPress={() => setShowTimePicker(true)}
@@ -219,7 +237,8 @@ const CalendarPage = () => {
               !formState.title ||
               !formState.description ||
               !formState.priority ||
-              !formState.category
+              !formState.category ||
+              !formState.recurrence
             }
             onPress={handleAddTask}
             className="rounded-md"

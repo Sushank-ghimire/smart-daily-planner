@@ -1,12 +1,12 @@
-import '../global.css';
-import { StatusBar, useColorScheme } from 'react-native';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import { Stack } from 'expo-router';
-import { useEffect } from 'react';
-import { useThemeStore } from '~/store/theme';
+import "../global.css";
+import { StatusBar } from "react-native";
+import { Stack } from "expo-router";
+import { useEffect } from "react";
+import { useThemeStore } from "~/store/theme";
+import DatabaseProvider from "~/database/DatabaseProvider";
 
 export const unstable_settings = {
-  initialRouteName: '(tabs)',
+  initialRouteName: "(tabs)",
 };
 
 export default function RootLayout() {
@@ -17,21 +17,21 @@ export default function RootLayout() {
   }, []);
 
   return (
-    <>
+    <DatabaseProvider>
       <StatusBar
         backgroundColor={theme.colors.background}
         networkActivityIndicatorVisible
-        showHideTransition={'fade'}
+        showHideTransition={"fade"}
         animated
-        barStyle={theme.mode === 'dark' ? 'light-content' : 'dark-content'}
+        barStyle={theme.mode === "dark" ? "light-content" : "dark-content"}
       />
       <Stack>
         <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
         <Stack.Screen
           name="modal"
           options={{
-            presentation: 'modal',
-            title: 'Notifications',
+            presentation: "modal",
+            title: "Notifications",
             headerStyle: {
               backgroundColor: theme.colors.background,
             },
@@ -43,6 +43,6 @@ export default function RootLayout() {
           }}
         />
       </Stack>
-    </>
+    </DatabaseProvider>
   );
 }

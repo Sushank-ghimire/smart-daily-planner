@@ -80,7 +80,7 @@ const CalendarPage = () => {
           new Date().toISOString(), // updatedAt
           "", // tags (empty for now)
           null, // estimatedDuration
-          0, // isHabit (false)
+          1, // isHabit (false)
           0, // habitStreak
         ]
       );

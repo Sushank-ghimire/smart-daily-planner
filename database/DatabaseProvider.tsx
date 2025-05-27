@@ -74,6 +74,7 @@ const DatabaseProvider = ({ children }: { children: React.ReactNode }) => {
       onInit={async (db) => {
         try {
           await db.execAsync(schema);
+          console.log("Database Initialized Success");
         } catch (error) {
           console.error("Database init error:", error);
         }

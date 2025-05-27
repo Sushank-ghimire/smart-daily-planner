@@ -5,15 +5,19 @@ import { Calendar } from "react-native-calendars";
 import ThemeBackground from "~/components/ThemeBackground";
 import ThemeText from "~/components/Text";
 import { useThemeStore } from "~/store/theme";
+import { useSQLiteContext } from "expo-sqlite";
 import { AntDesign } from "@expo/vector-icons";
 import { PriorityLevel, RecurrencePattern, TaskCategory } from "~/types";
 import Button from "~/components/Button";
 import DateTimePicker from "@react-native-community/datetimepicker";
 
 const CalendarPage = () => {
+  const db = useSQLiteContext();
   const { theme } = useThemeStore();
   const [time, setTime] = useState(new Date());
   const [showTimePicker, setShowTimePicker] = useState(false);
+
+  const [loading, setLoading] = useState(false);
 
   const [selectedDate, setSelectedDate] = useState<string>(new Date().toISOString().split("T")[0]);
 
@@ -36,39 +40,76 @@ const CalendarPage = () => {
     recurrence: "daily" as RecurrencePattern,
   });
 
-  const handleAddTask = () => {
-    const { title } = formState;
-    if (!title.trim()) {
+  const addData = async () => {
+    const { title, description, priority, category, recurrence } = formState;
+    setLoading(true);
+    try {
+      await db.runAsync(
+        `INSERT INTO tasks (
+        id,
+        title,
+        description,
+        dueDate,
+        completed,
+        completedAt,
+        priority,
+        category,
+        recurrence,
+        notificationInApp,
+        notificationTimeBefore,
+        createdAt,
+        updatedAt,
+        tags,
+        estimatedDuration,
+        isHabit,
+        habitStreak
+      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+        [
+          Date.now().toString(), // id
+          title, // title
+          description, // description
+          selectedDate, // dueDate
+          0, // completed (false)
+          null, // completedAt
+          priority, // priority
+          category, // category
+          recurrence, // recurrence
+          1, // notificationInApp (true)
+          30, // notificationTimeBefore (default)
+          new Date().toISOString(), // createdAt
+          new Date().toISOString(), // updatedAt
+          "", // tags (empty for now)
+          null, // estimatedDuration
+          0, // isHabit (false)
+          0, // habitStreak
+        ]
+      );
+
+      Alert.alert("Success", "Task added to database!");
+
+      // Reset the form state
+      setFormState({
+        title: "",
+        description: "",
+        priority: "medium",
+        category: "work",
+        recurrence: "daily",
+      });
+    } catch (error) {
+      console.error("Error inserting task:", error);
+      Alert.alert("Error", "Failed to add task. Please try again.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleAddTask = async () => {
+    const { title, description } = formState;
+    if (!title.trim() || !description.trim()) {
       Alert.alert("Validation Error", "Task title is required.");
       return;
     }
-    const newTask = {
-      ...formState,
-      dueDate: selectedDate,
-      dueTime: time.toISOString(),
-      id: Date.now().toString(),
-      completed: false,
-      recurrence: "none",
-      notificationPreferences: {
-        push: true,
-        inApp: true,
-        timeBefore: 30,
-      },
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    };
-
-    console.log("New Task Added:", newTask);
-    Alert.alert("Success", "Task added successfully!");
-
-    // Form Reset State
-    setFormState({
-      title: "",
-      description: "",
-      priority: "medium",
-      category: "work",
-      recurrence: "daily",
-    });
+    await addData();
   };
 
   return (
@@ -240,6 +281,7 @@ const CalendarPage = () => {
               !formState.category ||
               !formState.recurrence
             }
+            loading={loading}
             onPress={handleAddTask}
             className="rounded-md"
           />

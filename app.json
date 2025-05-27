@@ -9,7 +9,18 @@
       "output": "static",
       "favicon": "./assets/favicon.png"
     },
-    "plugins": ["expo-router", "expo-sqlite", ["expo-quick-actions", {}]],
+    "plugins": [
+      "expo-router",
+      [
+        "expo-sqlite",
+        {
+          "enableFTS": true,
+          "useSQLCipher": true,
+          "android": { "enableFTS": false, "useSQLCipher": false }
+        }
+      ],
+      ["expo-quick-actions", {}]
+    ],
     "experiments": {
       "typedRoutes": true,
       "tsconfigPaths": true
